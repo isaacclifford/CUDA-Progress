@@ -1,0 +1,32 @@
+Lecture 1: 
+
+Typical GPU Program
+
+1. cudaMalloc: CPU allocates storage of GPU 
+2. cudaMemCpy: CPU copies input data from CPU to GPU 
+3. kernel launch: CPU launches kernels on GPU to process data 
+4. cudaMemCpy : CPU copies results back to CPU from GPU
+
+To make a kernal function: 
+__global__ void square (float *d_out, float *d_in)
+
+// declare GPU memory pointers
+float * d_in;
+
+// Allocate GPU memory
+cudaMalloc((void**) &d_in, ARRAY_BYTES);
+cudaMalloc((void**) &d_out, ARRAY_BYTES);
+
+//Tranfer the array to the GPU
+cudaMemcpy(d_in, h_in, ARRAY_BYTES, cudaMemcpyHostToDevice);
+
+// Launch a kernel
+cube << <blocks, threads> >> (d_out, d_in)
+  * The maximum number of threads per block is 1024 (64-bit machines) or 512 (32-but machines)
+
+// Copy the out Array back to the CPU
+cudaMemcpy(d_in, h_in, ARRAY_BYTES, ceudaMemcpyDeviceToHost);
+
+//Free the GPU memory
+cudaFree(d_in);
+cudaFree(d_out);
